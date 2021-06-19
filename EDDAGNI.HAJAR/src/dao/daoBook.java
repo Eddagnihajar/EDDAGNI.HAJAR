@@ -3,6 +3,7 @@ package dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import models.Book;
 
@@ -65,11 +66,58 @@ public class daoBook {
 		
 		try {
 			DBInteraction.connect();
-			n = DBInteraction.Maj("update reservation set idBook="+book_id+" where idStudent=" +student_id );
+			n = DBInteraction.Maj("update reservation set  idStudent=" +student_id+" where idBook="+book_id );
 			DBInteraction.disconnect();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 		return n;
+	}
+	public int returnBookToBiblio(int id) {
+		int nb = 0;
+		
+		try {
+			DBInteraction.connect();
+			nb = DBInteraction.Maj("update book set student_id = "+null+" where id=" + id);
+			DBInteraction.disconnect();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return nb;
+	}
+	public List<Book> allBooksAvailable() {
+		List<Book> ab = new ArrayList<Book>();
+		try {
+			DBInteraction.connect();
+			String sql = "select * from book where student_id is "+ null;
+			ResultSet rs = DBInteraction.select(sql);
+			while (rs.next()) {
+				Book b = new Book();
+			b.setId(rs.getInt(1));
+			b.setGenre(rs.getString(2));
+			b.setCategorie(rs.getString(3));
+			b.setAuthor(rs.getString(4));
+			ab.add(b);
+		}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ab;
+		
+	}
+	public int deleteBook(int id) {
+		int nb = 0;
+
+		try {
+			DBInteraction.connect();
+			nb = DBInteraction.Maj("delete from book where id=" + id);
+			DBInteraction.disconnect();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return nb;
 	}
 	}

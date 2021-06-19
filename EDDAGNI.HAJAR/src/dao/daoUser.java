@@ -102,6 +102,18 @@ public class daoUser {
 		return u;
 		}
 
+	public int deleteUser(int id) {
+		int nb = 0;
 
+		try {
+			DBInteraction.connect();
+			nb = DBInteraction.Maj("delete from user where id=" + id);
+			DBInteraction.disconnect();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return nb;
+	}
 
 }
